@@ -1,0 +1,32 @@
+syntax = "proto3";
+package recipe;
+
+service RecipeService {
+	rpc GetRecipe(RecipeRequest) returns (Recipe) {}
+	rpc GetMetadata(Empty) returns (Meta) {}
+}
+
+// the numeric value associated with each field represent the order in which the
+// field follows within the messages
+message Recipe {
+	int32 id = 1;
+	string name = 2;
+	string steps = 3;
+	repeated Ingredient ingredients = 4;
+}
+
+message Ingredient {
+	int32 id = 1;
+	string name = 2;
+	string quantity = 3;
+}
+
+message RecipeRequest {
+	int32 id = 1;
+}
+
+message Meta {
+	int32 pid = 2;
+}
+
+message Empty {}
