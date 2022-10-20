@@ -7,17 +7,17 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const server = fastify({
 	https: {
-		key: fs.readFileSync(__dirname + '/tls/producer-private-key.key'),
-		cert: fs.readFileSync(__dirname + '/../shared/tls/producer-certificate.cert')
+		key: fs.readFileSync(__dirname + '/tls/basic-private-key.key'),
+		cert: fs.readFileSync(__dirname + '/../shared/tls/basic-certificate.cert')
 	}
 });
 const HOST = process.env.HOST || '127.0.0.1';
 const PORT = process.env.PORT || 4000;
 
-console.log(`worker pid=${process.pid}`);
+// console.log(`worker pid=${process.pid}`);
 
 server.get('/recipes/:id', async (req, reply) => {
-	console.log(`worker request pid=${process.pid}`);
+	// console.log(`worker request pid=${process.pid}`);
 	const id = Number(req.params.id);
 	if (id !== 42) {
 		reply.statusCode = 404;
@@ -38,5 +38,5 @@ server.get('/recipes/:id', async (req, reply) => {
 
 
 server.listen({port: PORT, host: HOST}, () => {
-	console.log(`Producer running at https://${HOST}:${PORT}`);
+	// console.log(`Producer running at https://${HOST}:${PORT}`);
 });
