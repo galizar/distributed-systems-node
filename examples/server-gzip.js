@@ -15,13 +15,13 @@ http.createServer((request, response) => {
 	const raw = fs.createReadStream(__dirname + '/index.html');
 	const acceptEncoding = request.headers['accept-encoding'] || '';
 	response.setHeader('Content-Type', 'text/plain');
-	console.log(acceptEncoding);
+	// console.log(acceptEncoding);
 	if (acceptEncoding.includes('gzip')) {
-		console.log('encoding with gzip');
+		// console.log('encoding with gzip');
 		response.setHeader('Content-Encoding', 'gzip');
 		raw.pipe(zlib.createGzip()).pipe(response);
 	} else {
-		console.log('no encoding');
+		// console.log('no encoding');
 		raw.pipe(response);
 	}
 }).listen(process.env.PORT || 1337);
