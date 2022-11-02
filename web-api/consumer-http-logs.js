@@ -3,13 +3,13 @@
 import fastify from 'fastify';
 import fetch from 'node-fetch';
 import middie from '@fastify/middie';
+import log from './logstash.js';
 
 const server = fastify();
 
 const HOST = process.env.HOST || '127.0.0.1';
 const PORT = process.env.PORT || 3000;
 const TARGET = process.env.TARGET || 'localhost:4000';
-const log = import('./logstash.js');
 
 (async () => {
 	await server.register(middie);
