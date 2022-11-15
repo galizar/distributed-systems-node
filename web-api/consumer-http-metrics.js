@@ -16,7 +16,7 @@ const statsd = new StatsD({host: 'localhost', port: 8125, prefix: 'web-api.'});
 	await server.register(middie);
 
 	// inbound metrics
-	const inboundClient = statsd.childClient({ prefix: '.inbound' });
+	const inboundClient = statsd.childClient({ prefix: 'inbound.' });
 
 	// register inbound metrics middleware
 	server.use((req, res, next) => {
@@ -27,9 +27,17 @@ const statsd = new StatsD({host: 'localhost', port: 8125, prefix: 'web-api.'});
 		res.end = () => {
 			res.end = end;
 			end.apply(res);
+			// Time by URL?
+  	  // if (timeByUrl) {
+  	    // urlPrefix += '.';
+  	    // urlPrefix += findRouteName(req, res) || notFoundRouteName;
+  	    // client.increment('response_code' + urlPrefix + '.' + res.statusCode);
+  	  // }
 
-		}
-
+			inboundClient.increment('response_code.' + res.statusCode);
+			inboundClient.timing(`response_time`, startTime);
+		}  
+		next();
 	});
 	// ---
 
