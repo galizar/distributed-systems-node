@@ -4,6 +4,8 @@ import fastify from 'fastify';
 import fetch from 'node-fetch';
 import StatsD from 'hot-shots';
 import middie from '@fastify/middie';
+import v8 from 'v8';
+import fs from 'fs';
 
 const server = fastify();
 
@@ -41,11 +43,6 @@ const statsd = new StatsD({host: 'localhost', port: 8125, prefix: 'web-api.'});
 	});
 	// ---
 
-	// "generic middleware that tracks inbound requests"
-	// server.use(statsd.helpers.getExpressMiddleware('inbound', {
-		// timeByUrl: true
-	// }));
-
 	server.get('/', async () => {
 		const begin = new Date();
 		const req = await fetch(`http://${TARGET}/recipes/42`);
@@ -65,3 +62,24 @@ const statsd = new StatsD({host: 'localhost', port: 8125, prefix: 'web-api.'});
 		console.log(`Consumer running at http://${HOST}:${PORT}/`);
 	});
 })();
+
+setInterval(() => {
+	statsd.gauge('server.conn', server.server.connections);
+
+	const m = process.memoryUsage();
+	statsd.gauge('server.heap.size', m.heapUsed);
+	statsd.gauge('server.memory.total', m.heapTotal);
+
+	const h = v8.getHeapStatistics();
+	statsd.gauge('server.heap.size', h.used_heap_size);
+	statsd.gauge('server.heap.limit', h.heap_size_limit);
+
+	fs.readdir('/proc/self/fd', (err, list) => {
+		if (err) return;
+		statsd.gauge('server.descriptors', list.length);
+	});
+
+	const begin = new Date();
+	setTimeout(() => { statsd.timing('eventlag', begin); }, 0);
+
+}, 10000)
