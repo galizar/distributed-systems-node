@@ -67,7 +67,7 @@ setInterval(() => {
 	statsd.gauge('server.conn', server.server.connections);
 
 	const m = process.memoryUsage();
-	statsd.gauge('server.heap.size', m.heapUsed);
+	statsd.gauge('server.memory.used', m.heapUsed);
 	statsd.gauge('server.memory.total', m.heapTotal);
 
 	const h = v8.getHeapStatistics();
