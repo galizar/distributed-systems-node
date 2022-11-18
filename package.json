@@ -20,6 +20,7 @@
     "fastify": "^4.8.1",
     "hot-shots": "^9.3.0",
     "mercurius": "^10.5.0",
-    "node-fetch": "^3.2.10"
+    "node-fetch": "^3.2.10",
+    "zipkin-lite": "^0.1.1"
   }
 }
