@@ -14,7 +14,7 @@ const ZIPKIN = process.env.ZIPKIN || 'localhost:9411';
 const zipkin = new Zipkin({
 	zipkinHost: ZIPKIN,
 	serviceName: 'web-api', servicePort: PORT, serviceIp: HOST,
-	init: 'host'
+	init: 'short'
 });
 
 server.addHook('onRequest', zipkin.onRequest());
@@ -24,7 +24,7 @@ server.get('/', async (req) => {
 
 	req.zipkin.setName('get_root');
 
-	const url = 'http://${TARGET}/recipes/42';
+	const url = `http://${TARGET}/recipes/42`;
 	const zreq = req.zipkin.prepare();
 	const recipe = await fetch(url, { headers: zreq.headers });
 	zreq.complete('GET', url);
