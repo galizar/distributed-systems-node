@@ -1,0 +1,6 @@
+version: "3.7" # compose file version
+services:
+  zipkin:
+    image: openzipkin/zipkin-slim:2.19
+    ports:
+      - "127.0.0.1:9411:9411" # port mapping
