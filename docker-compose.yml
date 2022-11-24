@@ -4,3 +4,29 @@ services:
     image: openzipkin/zipkin-slim:2.19
     ports:
       - "127.0.0.1:9411:9411" # port mapping
+
+  recipe-api:
+    build:
+      context: ./recipe-api
+      dockerfile: Dockerfile-zipkin # only required when conf file has a name
+                                    # other than "Dockerfile"
+    ports:
+      - "127.0.0.1:4000:4000"
+    environment: # environment variables
+      HOST: 0.0.0.0
+      ZIPKIN: zipkin:9411
+    depends_on:
+      - zipkin # zipkin service must be started first 
+  web-api:
+    build:
+      context: ./web-api
+      dockerfile: Dockerfile-zipkin
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      TARGET: recipe-api:4000
+      ZIPKIN: zipkin:9411
+      HOST: 0.0.0.0
+    depends_on:
+      - zipkin
+      - recipe-api
