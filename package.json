@@ -20,6 +20,7 @@
     "fastify": "^4.8.1",
     "hot-shots": "^9.3.0",
     "ioredis": "^5.2.4",
+    "lru-cache": "^7.14.1",
     "mercurius": "^10.5.0",
     "node-fetch": "^3.2.10",
     "pg": "^8.8.0",
