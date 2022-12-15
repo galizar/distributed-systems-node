@@ -4,9 +4,9 @@ import fastify from 'fastify';
 import DatabaseReconnection from './db.js';
 
 const db = new DatabaseReconnection({
-host: 'localhost', port: 5432,
-user: 'user', password: 'hunter2',
-database: 'dbconn', retry: 1_000
+	host: 'localhost', port: 5432,
+	user: 'user', password: 'hunter2',
+	database: 'dbconn', retry: 1_000
 });
 db.connect();
 
